@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: category-api
+    restart: always
+    ports:
+      - '4000:4000'
+    environment:
+      MONGO_URI: mongodb://mongo:27017/multicat
+      JWT_SECRET: supersecret
+      JWT_EXPIRES_IN: 7d
+      BCRYPT_SALT_ROUNDS: 10
+      PORT: 4000
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:5.0
+    container_name: mongo-db
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - '27017:27017'
+
+volumes:
+  mongo_data:
